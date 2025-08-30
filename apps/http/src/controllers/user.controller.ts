@@ -4,8 +4,6 @@ import client from "@repo/db/client";
 import { SignupSchema, SigninSchema, UpdateMetadataSchema } from "../types";
 import { Request, Response } from "express";
 
-const secret = `${process.env.JWT_SECRET}`;
-
 export const register = async (req: Request, res: Response) => {
   try {
     const parser = SignupSchema.safeParse(req.body);
@@ -23,14 +21,15 @@ export const register = async (req: Request, res: Response) => {
       },
     });
 
-    const token = jwt.sign({ userId: user.id, role: user.role }, secret, {
+
+    const token = jwt.sign({ userId: user.id, role: user.role }, process.env.JWT_SECRET!, {
       expiresIn: "7d",
     });
-
+    
     return res
-      .status(200)
-      .cookie("token", token, { httpOnly: true, secure: true })
-      .json({ token: token, message: "User registered successfully" });
+    .status(200)
+    .cookie("token", token, { httpOnly: true, secure: true })
+    .json({ token: token, message: "User registered successfully" });
   } catch (error) {
     res.status(400).json({ error: "User already exists" });
   }
@@ -43,16 +42,16 @@ export const login = async (req: Request, res: Response) => {
       res.status(403).json({ message: "Invalid data" });
       return;
     }
-
+    
     const user = await client.user.findUnique({
       where: { username: parser.data.username },
     });
-
+    
     if (!user) {
       res.status(404).json({ message: "User not found" });
       return;
     }
-
+    
     const validPassword = await bcrypt.compare(
       parser.data.password,
       user.password
@@ -62,7 +61,7 @@ export const login = async (req: Request, res: Response) => {
       return;
     }
 
-    const token = jwt.sign({ id: user.id, role: user.role }, secret, {
+    const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET!, {
       expiresIn: "7d",
     });
 
