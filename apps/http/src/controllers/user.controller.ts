@@ -30,7 +30,7 @@ export const register = async (req: Request, res: Response) => {
     return res
       .status(200)
       .cookie("token", token, { httpOnly: true, secure: true })
-      .json({ message: "User registered successfully" });
+      .json({ token: token, message: "User registered successfully" });
   } catch (error) {
     res.status(400).json({ error: "User already exists" });
   }
@@ -69,7 +69,7 @@ export const login = async (req: Request, res: Response) => {
     return res
       .status(200)
       .cookie("token", token, { httpOnly: true, secure: true })
-      .json({ message: "User logged in successfully" });
+      .json({ token: token, message: "User logged in successfully" });
   } catch (error) {
     res.status(400).json({ error: "An error occurred while logging in" });
   }
