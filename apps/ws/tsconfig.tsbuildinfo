@@ -1,1 +1,1 @@
-{"root":["./src/index.ts","./src/manager/ConnectionManager.ts","./src/manager/RoomManager.ts","./src/manager/SpawnMannager.ts","./src/sockets/user.ts","./src/types/index.ts"],"version":"5.9.2"}
+{"root":["./src/index.ts","./src/manager/ConnectionManager.ts","./src/manager/RoomManager.ts","./src/manager/SpaceMannager.ts","./src/sockets/user.ts","./src/types/index.ts"],"version":"5.9.2"}

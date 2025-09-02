@@ -7,8 +7,6 @@ interface Token extends JwtPayload {
     role: string
 }
 
-const secret = `${process.env.JWT_SECRET}`;
-
 export const authenticateUser = async (req: Request, res: Response, next: NextFunction) => {
   const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
 
@@ -17,7 +15,7 @@ export const authenticateUser = async (req: Request, res: Response, next: NextFu
   }
 
   try {
-    const decoded = jwt.verify(token, secret) as Token;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as Token;
     if(!decoded) {
       res.status(403).json({ message: "Invalid token" });
       return;

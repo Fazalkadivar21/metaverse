@@ -5,10 +5,16 @@ import dotenv from "dotenv"
 import spaceRouter from "./routes/space.route"
 import adminRouter from "./routes/admin.router"
 import avatarRouter from "./routes/avatar.route"
+import cors from "cors"
 
 dotenv.config()
 
 const app = express()
+
+app.use(cors({
+  origin: "*",
+  credentials: true
+}))
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
