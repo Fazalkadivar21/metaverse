@@ -82,16 +82,16 @@ export class User {
   }
 
   public async join(data: joinObj) {
-    try {
-      const { id } = jwt.verify(
+    try {      
+      const { userId } = jwt.verify(
         data.token,
         process.env.JWT_SECRET!
       ) as JwtPayload;
-      if (!id) {
+      if (!userId) {
         this.ws.close();
         return;
       }
-      this.userId = id;
+      this.userId = userId;
 
       const space = await SpaceManager.getInstance().setSpace(data.spaceId);
       if (!space) {
@@ -113,7 +113,7 @@ export class User {
             RoomManager.getInstance()
               .rooms.get(this.spaceId)
               ?.filter((x) => x.id !== this.id)
-              ?.map((u) => ({ id: u.id })) ?? [],
+              ?.map((u) => ({ userId: u.userId, x: u.x, y: u.y })) ?? [],
         },
       });
 
@@ -160,7 +160,7 @@ export class User {
           this,
           this.spaceId!
         );
-      } else {
+        } else {
         this.send({
           type: "movement-rejected",
           payload: { x: this.x, y: this.y },
